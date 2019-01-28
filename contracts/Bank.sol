@@ -61,7 +61,7 @@ contract Bank is Ownable {
     }
 
     if (spentToday[msg.sender].add(_value) <= dailyLimit) {
-      spentToday[msg.sender] == spentToday[msg.sender].add(_value);
+      spentToday[msg.sender] = spentToday[msg.sender].add(_value);
       return true;
     }
     return false;
@@ -73,6 +73,6 @@ contract Bank is Ownable {
    */
   function today() private view returns (uint256) {
     return now / 1 days;
-  }
+  } 
 
 }
