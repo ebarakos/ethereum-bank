@@ -8,14 +8,16 @@ Use case: Someone's private key is compromised. The original user can cooperate 
 
 ## Installation
 
-`npm -g install truffle`
-`truffle migrate`
+```npm -g install truffle```
+
+```truffle migrate```
 
 Check
 `https://truffleframework.com/docs/truffle/overview` 
 for further details.
 
-In order to run the tests(located in test/bank.js):
+In order to run the tests:
 
-`npm install`
-`truffle test`
+```npm install```
+
+```truffle test```
