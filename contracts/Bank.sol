@@ -9,7 +9,8 @@ contract Bank is Ownable {
     mapping (address => uint256) private balances;
     mapping (address => bool) private whitelist;
     mapping (address => uint256) private spentToday;
-    mapping (address => uint256) private lastDay;
+    mapping (address => uint256) private lastDay; 
+    // could be added to constructor parameter
     uint256 public dailyLimit = 10 ether;
 
     event Deposit(address account, uint256 amount);
@@ -51,28 +52,22 @@ contract Bank is Ownable {
 
    /**
    * Influenced by OpenZeppelin's DayLimit.sol
-   * @dev Return true if limit has not been reached. A separate entry is persisted on relevant mappings.
+   * @dev Return true if limit has not been reached. A separate limit for each address.
    */
-  function underLimit(uint256 _value) internal returns (bool) {
-    // reset the spend limit if we're on a different day to last time.
-    if (today() > lastDay[msg.sender]) {
-      spentToday[msg.sender] = 0;
-      lastDay[msg.sender] = today();
+    function underLimit(uint256 _value) internal returns (bool) {
+        if (today() > lastDay[msg.sender]) {
+            spentToday[msg.sender] = 0;
+            lastDay[msg.sender] = today();
+        }
+        if (spentToday[msg.sender].add(_value) <= dailyLimit) {
+            spentToday[msg.sender] = spentToday[msg.sender].add(_value);
+            return true;
+        }
+        return false;
     }
 
-    if (spentToday[msg.sender].add(_value) <= dailyLimit) {
-      spentToday[msg.sender] = spentToday[msg.sender].add(_value);
-      return true;
-    }
-    return false;
-  }
-
-  /**
-   * @dev Determine today's index
-   * @return uint256 of today's index.
-   */
-  function today() private view returns (uint256) {
-    return now / 1 days;
-  } 
+    function today() private view returns (uint256) {
+        return now / 1 days;
+    } 
 
 }
